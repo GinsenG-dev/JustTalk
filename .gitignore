@@ -1,0 +1,3 @@
+backend/.venv/
+backend/justtalk.db
+frontend/node_modules/

@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 
 class RegisterIn(BaseModel):
-    username: str = Field(min_length=3, max_length=50)
+    username: str = Field(min_length=3, max_length=50, pattern=r"^[a-zA-Z0-9_]+$",)
     email: EmailStr
     password: str = Field(min_length=6, max_length=128)
 

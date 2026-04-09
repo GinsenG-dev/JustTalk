@@ -2,22 +2,31 @@ import os
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+import bcrypt
 from jose import JWTError, jwt
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_ME")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
+def _password_bytes(password: str) -> bytes:
+    """Bcrypt учитывает не больше 72 байт UTF-8."""
+    return password.encode("utf-8")[:72]
+
+
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(_password_bytes(password), bcrypt.gensalt()).decode("ascii")
 
 
 def verify_password(password: str, password_hash: str) -> bool:
-    return pwd_context.verify(password, password_hash)
+    try:
+        return bcrypt.checkpw(
+            _password_bytes(password),
+            password_hash.encode("ascii"),
+        )
+    except ValueError:
+        return False
 
 
 def create_access_token(subject: str) -> str:

@@ -1,0 +1,9 @@
+{
+  "name": "justtalk",
+  "private": true,
+  "scripts": {
+    "dev": "./scripts/dev.sh",
+    "dev:backend": "cd backend && . .venv/bin/activate && export DATABASE_URL=sqlite:///./justtalk.db && uvicorn app.main:app --host 127.0.0.1 --port 8000",
+    "dev:frontend": "cd frontend && npm run dev -- --host 127.0.0.1 --port 5173"
+  }
+}
